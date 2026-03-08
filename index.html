@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simple Web App</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 40px;
+      width: 360px;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #1a1a2e;
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+
+    .counter-display {
+      font-size: 4rem;
+      font-weight: 700;
+      color: #4f46e5;
+      margin-bottom: 24px;
+      transition: transform 0.1s ease;
+    }
+
+    .counter-display.bump {
+      transform: scale(1.2);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 22px;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .btn-dec  { background: #e0e7ff; color: #4f46e5; }
+    .btn-dec:hover  { background: #c7d2fe; }
+
+    .btn-inc  { background: #4f46e5; color: #fff; }
+    .btn-inc:hover  { background: #4338ca; }
+
+    .btn-reset { background: #fce7f3; color: #be185d; }
+    .btn-reset:hover { background: #fbcfe8; }
+
+    .color-picker-section {
+      border-top: 1px solid #e5e7eb;
+      padding-top: 20px;
+    }
+
+    .color-picker-section label {
+      display: block;
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 10px;
+    }
+
+    .color-swatches {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .swatch {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 3px solid transparent;
+      cursor: pointer;
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .swatch:hover    { transform: scale(1.15); }
+    .swatch.active   { border-color: #1a1a2e; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Interactive Counter</h1>
+    <p class="subtitle">Click the buttons to change the count.</p>
+
+    <div class="counter-display" id="counter">0</div>
+
+    <div class="btn-group">
+      <button class="btn-dec" id="decBtn">- 1</button>
+      <button class="btn-inc" id="incBtn">+ 1</button>
+      <button class="btn-reset" id="resetBtn">Reset</button>
+    </div>
+
+    <div class="color-picker-section">
+      <label>Change accent color</label>
+      <div class="color-swatches" id="swatches">
+        <div class="swatch active" data-color="#4f46e5" style="background:#4f46e5;"></div>
+        <div class="swatch"        data-color="#0891b2" style="background:#0891b2;"></div>
+        <div class="swatch"        data-color="#16a34a" style="background:#16a34a;"></div>
+        <div class="swatch"        data-color="#dc2626" style="background:#dc2626;"></div>
+        <div class="swatch"        data-color="#d97706" style="background:#d97706;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let count = 0;
+    const counterEl = document.getElementById('counter');
+
+    function bump() {
+      counterEl.classList.remove('bump');
+      // Force reflow so the animation restarts
+      void counterEl.offsetWidth;
+      counterEl.classList.add('bump');
+    }
+
+    function render() {
+      counterEl.textContent = count;
+    }
+
+    document.getElementById('incBtn').addEventListener('click', () => {
+      count++;
+      render();
+      bump();
+    });
+
+    document.getElementById('decBtn').addEventListener('click', () => {
+      count--;
+      render();
+      bump();
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      count = 0;
+      render();
+      bump();
+    });
+
+    // Color swatches
+    document.getElementById('swatches').addEventListener('click', (e) => {
+      const swatch = e.target.closest('.swatch');
+      if (!swatch) return;
+
+      const color = swatch.dataset.color;
+
+      // Update counter color
+      counterEl.style.color = color;
+
+      // Update increment button colors
+      const incBtn = document.getElementById('incBtn');
+      incBtn.style.background = color;
+
+      // Mark active swatch
+      document.querySelectorAll('.swatch').forEach(s => s.classList.remove('active'));
+      swatch.classList.add('active');
+    });
+  </script>
+</body>
+</html>
