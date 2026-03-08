@@ -155,13 +155,25 @@
     }
 
     document.getElementById('incBtn').addEventListener('click', () => {
-      count = 0.5*count + 1;
+      if (count >= 0) {
+        count = 0.5*count + 1;
+        count = count.toFixed(5);
+      }
+      else {
+        count = 0;
+      }
       render();
       bump();
     });
 
     document.getElementById('decBtn').addEventListener('click', () => {
-      count = 0.5*count - 1;
+      if (count <= 0) {
+        count = 0.5*count - 1;
+        count = count.toFixed(5);
+      }
+      else {
+        count = 0;
+      }
       render();
       bump();
     });
